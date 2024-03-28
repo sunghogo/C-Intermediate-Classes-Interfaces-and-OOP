@@ -8,10 +8,6 @@ namespace Exercises
     {
         static void Main(string[] args)
         {
-            var activity = new Activity("Some activity");
-            string output = Console.Out.ToString();
-            Console.WriteLine(output);
-
             string? input = "";
 
             while (input != "q")
@@ -63,7 +59,23 @@ namespace Exercises
                         break;
                     case "6":
                         // S6 Exercises
-                        var engine = new Engine();
+                        var workflow = new Workflow(
+                            new List<IActivity>
+                            {
+                                new Activity("Upload a video to a cloud storage"),
+                                new Activity(
+                                    "Call a web service provided by a third-party video encoding service to tell them you have a video ready for encoding"
+                                ),
+                                new Activity(
+                                    "Send an email to the owner of the video notifying them that the video started processing"
+                                ),
+                                new Activity(
+                                    "Change the status of the video record in the database to \"Processing\""
+                                )
+                            }
+                        );
+                        var engine = new Engine(new List<IWorkflow>() { workflow });
+                        engine.Run();
                         break;
                 }
             }

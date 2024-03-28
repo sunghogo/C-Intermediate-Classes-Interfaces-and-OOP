@@ -10,19 +10,6 @@ namespace Exercises.S6
     {
         private readonly List<IWorkflow> _workflows;
 
-        public void Run()
-        {
-            foreach (var workflow in _workflows)
-            {
-                workflow.Run();
-            }
-        }
-
-        public void Run(IWorkflow workflow)
-        {
-            workflow.Run();
-        }
-
         public Engine()
         {
             _workflows = new List<IWorkflow>();
@@ -32,10 +19,52 @@ namespace Exercises.S6
         {
             _workflows = new List<IWorkflow>();
 
+            if (workflows is null)
+            {
+                throw new ArgumentNullException(nameof(workflows));
+            }
+
             foreach (var workflow in workflows)
             {
+                if (workflow is null)
+                {
+                    throw new ArgumentNullException(nameof(workflow));
+                }
                 _workflows.Add(workflow);
             }
+        }
+
+        public void Run()
+        {
+            for (int i = 0; i < _workflows.Count; )
+            {
+                var workflow = _workflows[i];
+                workflow.Run();
+                _workflows.Remove(workflow);
+            }
+        }
+
+        public void Run(IWorkflow workflow)
+        {
+            workflow.Run();
+        }
+
+        public void Add(IWorkflow workflow)
+        {
+            if (workflow is null)
+            {
+                throw new ArgumentNullException(nameof(workflow));
+            }
+            _workflows.Add(workflow);
+        }
+
+        public void Remove(IWorkflow workflow)
+        {
+            if (workflow is null)
+            {
+                throw new ArgumentNullException(nameof(workflow));
+            }
+            _workflows.Remove(workflow);
         }
     }
 }
